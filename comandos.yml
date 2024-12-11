@@ -1,1 +1,93 @@
+# Clave-Valor (Key-Value)
+nombre: ejemplo
+edad: 25
+activo: true
+
+
+
+# Listas
+lenguajes:
+  - Python
+  - JavaScript
+  - Go
+# o tambien
+lenguajes: [Python, JavaScript, Go]
+
+
+
+# Diccionarios anidados
+usuario:
+  nombre: Juan
+  edad: 30
+  direccion:
+    ciudad: Bogotá
+    pais: Colombia
+
+
+
+# Variables y referencias
+version: "3.8"
+services:
+  web:
+    image: nginx
+    ports:
+      - "80:80"
+# En Ansible, las variables se definen así:
+variables:
+  host: localhost
+  puerto: 8080
+
+
+
+# Anclas y alias
+base: &config_base
+  nombre: servicio
+  version: 1.0
+
+servicio1:
+  <<: *config_base
+  puerto: 8080
+
+servicio2:
+  <<: *config_base
+  puerto: 9090
+
+
+
+# Comentarios
+# Este es un comentario
+nombre: ejemplo  # Comentario al final de la línea
+
+
+
+# Múltiples documentos en un solo archivo
+# Primer documento
+---
+nombre: documento1
+valores:
+  - 1
+  - 2
+  - 3
+
+# Segundo documento
+---
+nombre: documento2
+valores:
+  - a
+  - b
+  - c
+
+
+
+# Strings multilínea
+# Con |, se conserva el formato:
+descripcion: |
+  Este es un texto multilínea.
+  Cada línea se conserva tal como está.
+# Con >, se convierte en una sola línea:
+descripcion: >
+  Este es un texto multilínea
+  que será combinado en una sola línea.
+
+
 
