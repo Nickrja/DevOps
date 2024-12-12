@@ -1,4 +1,5 @@
 # Clave-Valor (Key-Value)
+# Es la forma básica de definir configuraciones en YAML.
 nombre: ejemplo
 edad: 25
 activo: true
@@ -6,16 +7,18 @@ activo: true
 
 
 # Listas
+# Las listas se definen con guiones (-) y son útiles para enumerar elementos.
 lenguajes:
   - Python
   - JavaScript
   - Go
-# o tambien
+# También se pueden definir en línea:
 lenguajes: [Python, JavaScript, Go]
 
 
 
 # Diccionarios anidados
+# Se usan para representar estructuras más complejas.
 usuario:
   nombre: Juan
   edad: 30
@@ -26,6 +29,7 @@ usuario:
 
 
 # Variables y referencias
+# Algunas herramientas que usan YAML permiten definir variables. Por ejemplo, en Docker Compose:
 version: "3.8"
 services:
   web:
@@ -40,6 +44,7 @@ variables:
 
 
 # Anclas y alias
+# Permiten reutilizar datos dentro del archivo.
 base: &config_base
   nombre: servicio
   version: 1.0
@@ -55,12 +60,14 @@ servicio2:
 
 
 # Comentarios
-# Este es un comentario
+# Se agregan con el símbolo #.
 nombre: ejemplo  # Comentario al final de la línea
 
 
 
 # Múltiples documentos en un solo archivo
+# Puede separar documentos con ---.
+
 # Primer documento
 ---
 nombre: documento1
@@ -80,6 +87,8 @@ valores:
 
 
 # Strings multilínea
+# Para cadenas largas, se pueden usar el carácter | o >.
+
 # Con |, se conserva el formato:
 descripcion: |
   Este es un texto multilínea.
@@ -91,3 +100,107 @@ descripcion: >
 
 
 
+# Ejemplos de valores nulos
+clave1: ~
+clave2: null
+clave3:
+
+
+
+# String complejos
+#   Comillas simples ('): Conservan los caracteres tal como están (sin interpretar).
+mensaje: 'Hola\nMundo'  # Esto no interpreta \n como un salto de línea
+
+#   Comillas dobles ("): Permiten usar caracteres escapados.
+mensaje: "Hola\nMundo"  # Esto interpreta \n como un salto de línea
+
+
+
+# Documentos combinados
+# Puede definir múltiples documentos en un archivo YAML y referenciar partes entre ellos.
+---
+config_base: &config
+  app: MiApp
+  version: 1.0
+---
+config_extendida:
+  <<: *config
+  extras:
+    - logging
+    - debug
+
+
+
+# Etiquetas personalizadas
+# Puedes usar etiquetas (!) para indicar que un valor tiene un significado especial. Esto es común en herramientas específicas.
+!secreto "clave-encriptada"
+
+# Las herramientas pueden procesar esta etiqueta para tratar el valor de forma especial.
+
+
+
+# Expresiones complejas
+# Aunque no son nativas de YAML, algunas herramientas permiten expresiones en los archivos, como referencias de entorno o expresiones condicionales.
+# Ejemplo en GitHub Actions:
+env:
+  NODE_ENV: production
+  API_URL: ${{ secrets.API_URL }}
+
+
+
+# Combinación de listas y diccionarios
+# Puede usar listas de diccionarios para estructurar datos más complejos.
+servicios:
+  - nombre: base_datos
+    tipo: postgres
+    puerto: 5432
+  - nombre: cache
+    tipo: redis
+    puerto: 6379
+
+
+
+# Bloques de cadenas literales
+# Puedes mezclar cadenas literales con otros constructos para crear configuraciones avanzadas.
+script: |
+  #!/bin/bash
+  echo "Este es un script de ejemplo"
+  exit 0
+
+
+
+# Ejemplos en herramientas específicas:
+
+# Docker Compose
+version: "3.9"
+services:
+  web:
+    image: nginx
+    ports:
+      - "8080:80"
+
+# GitHub Actions
+name: CI/CD Pipeline
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+# Kubernetes
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-app
+spec:
+  containers:
+    - name: app
+      image: nginx
